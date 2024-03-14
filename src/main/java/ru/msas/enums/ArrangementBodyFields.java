@@ -23,7 +23,7 @@ public enum ArrangementBodyFields {
     maximalnterestRateCoefficient(false, true),
     maximalnterestRateCoefficientAction(false, true);
 
-    Boolean isRequired;
+    public Boolean isRequired;
     Boolean isBody;
 
 

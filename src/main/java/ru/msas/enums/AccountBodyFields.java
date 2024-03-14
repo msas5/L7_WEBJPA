@@ -14,8 +14,8 @@ public enum AccountBodyFields {
     counter(false, false),
     salesCode(false, false);
 
-    Boolean isRequired;
-    Boolean isBody;
+    public Boolean isRequired;
+    public Boolean isBody;
 
     AccountBodyFields(Boolean isRequired, Boolean isBody){
         this.isBody  = isBody;

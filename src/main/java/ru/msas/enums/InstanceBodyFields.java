@@ -23,7 +23,7 @@ public enum InstanceBodyFields {
     referenceCode(false, true),
     additionalPropertiesVip(false, true),
     arrangement (false, true);
-    Boolean isRequired;
+    public Boolean isRequired;
     Boolean isBody;
 
     InstanceBodyFields(Boolean isRequired, Boolean isBody){
