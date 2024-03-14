@@ -1,15 +1,13 @@
 package ru.msas;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.msas.entity.*;
-import ru.msas.repo.*;
 import ru.msas.services.AccountService;
 import ru.msas.services.InstanceService;
-
 
 import java.util.*;
 
@@ -17,34 +15,24 @@ import static java.lang.Integer.parseInt;
 
 
 @RestController
-public class WebService {
+public class WebController {
 
-
-    // @Autowired
-    TppProductRepo tppProduct;
-    // @Autowired
-    AgreementRepo agreement;
-    //@Autowired
-    TppRefProductClassRepo tppProductClass;
-    //@Autowired
-    TppRefProductRegisterTypeRepo tppRefProductRegisterType;
-    //@Autowired
-    TppProductRegisterRepo tppProductRegister;
-    //@Autowired
-    AccountPoolRepo accountPool;
-    //@Autowired
-    AccountRepo account;
-
+    @Autowired
+    DataReader dataReader;
+    @Autowired
+    CheckerInstance checkerInstance;
+    @Autowired
+    CheckerInstance checkerAccount;
     AccountService accountService;
     InstanceService instanceService;
 
-    sealed interface CreateInstanceResponse{};
-
-    record CreateInstanseResponseError() implements CreateInstanceResponse{}
-    record ResponseOk() implements CreateInstanceResponse {}
-    record RequestFields(){}
     @PostMapping("/corporate-settlement-instance/create")
-    public ResponseEntity<Map <String, Object>> corporateSettlementInstanseCreate(@RequestBody Map<String, Object> model){
+    public ResponseEntity<Map <String, Object>> corporateSettlementInstanseCreate(@RequestBody Map<String, Object> dtoRequest){
+        Model model = dataReader.get();
+        model.setRqMap(dtoRequest);
+        model = checkerInstance.apply(model);
+
+
         Map<String,Object> rMap = instanceService.Create(model);
         Map<String,Object> rMessage = new HashMap<String,Object>();
         String sErrorCode = (String) rMap.get("ErrorCode");
@@ -63,8 +51,14 @@ public class WebService {
     }
 
     @PostMapping("/corporate-settlement-account/create")
-    public ResponseEntity<Map <String, Object>>  corporateSettlementAccountCreate(@RequestBody Map<String, Object> model){
+    public ResponseEntity<Map <String, Object>>  corporateSettlementAccountCreate(@RequestBody Map<String, Object> dtoRequest){
+        Model model = dataReader.get();
+        model.setRqMap(dtoRequest);
+        model = checkerAccount.apply(model);
+
+
        Map<String,Object> rMap = accountService.Create(model);
+
        Map<String,Object> rMessage = new HashMap<String,Object>();
        String sErrorCode = (String)rMap.get("ErrorCode");
        if (!sErrorCode.isEmpty()){

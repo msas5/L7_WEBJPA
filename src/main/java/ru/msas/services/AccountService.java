@@ -15,12 +15,7 @@ import java.util.Map;
 
 @Service
 public class AccountService {
-    // @Autowired
-    TppProductRepo tppProduct;
-    // @Autowired
-    AgreementRepo agreement;
-    //@Autowired
-    TppRefProductClassRepo tppProductClass;
+
     //@Autowired
     TppRefProductRegisterTypeRepo tppRefProductRegisterType;
     //@Autowired
@@ -30,35 +25,11 @@ public class AccountService {
     //@Autowired
     AccountRepo account;
 
-    public Map<String,Object> Create(Map<String,Object> model){
-        Map<String,Object> rqMap = model;
+    public Map<String,Object> Create(ru.msas.Model model){
+        Map<String,Object> rqMap = model.getRqMap();
         Map<String,Object> rMessage = new HashMap<String,Object>();
         Object tObj;
         String tStr;
-
-
-        //Шаг 1.
-        for(AccountBodyFields value: AccountBodyFields.values()){
-            if(value.isRequired == true) {
-                tObj = rqMap.get(value.name());
-                try{
-                    tStr = (String) (tObj);
-                } catch( Exception e){
-                    rMessage.clear();
-                    rMessage.put("Error", (Object) "String = (String)tobj for value '" + value.name()+ "'" + e.getMessage());
-                    rMessage.put("ErrorCode",(Object) "400");
-                    return rMessage;
-                }
-                if ( tObj == null || tStr.isEmpty() ){
-                    rMessage.clear();
-                    rMessage.put("Error",(Object)"400/Bad Request. Required Parameter <" + value.name() + "> is Empty");
-                    rMessage.put("ErrorCode",(Object) "400");
-                    return rMessage;
-                }
-            }
-        }
-
-
 
 
         //Шаг 2.
