@@ -3,7 +3,6 @@ package ru.msas;
 import org.springframework.stereotype.Component;
 import ru.msas.enums.ArrangementBodyFields;
 import ru.msas.enums.InstanceBodyFields;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,14 +28,12 @@ public class CheckerInstance implements UnaryOperator<Model> {
                     rMessage.put("ErrorCode",(Object) "400");
                     model.setrMessage(rMessage);
                     return model;
-
                 }
                 if (tObj == null || tStr.isEmpty()) {
                     rMessage.put("Error", (Object) "400/Bad Request. Required Parameter <" + value.name() + "> is Empty");
                     rMessage.put("ErrorCode",(Object) "400");
                     model.setrMessage(rMessage);
                     return model;
-
                 }
             }
         }
@@ -74,11 +71,9 @@ public class CheckerInstance implements UnaryOperator<Model> {
                         rMessage.put("ErrorCode", (Object) "400");
                         model.setrMessage(rMessage);
                         return model;
-
                     }
                 }
             }
-
         }
         model.setAlArrangement(alArrangement);
         return model;

@@ -31,6 +31,4 @@ public class Model {
     public void setRqMap(Map<String, Object> rqMap) {
         this.rqMap = rqMap;
     }
-
 }
-

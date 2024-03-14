@@ -2,7 +2,6 @@ package ru.msas;
 
 import org.springframework.stereotype.Component;
 import ru.msas.enums.AccountBodyFields;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.UnaryOperator;
@@ -16,8 +15,6 @@ public class CheckerAccount  implements UnaryOperator<Model> {
         Map<String, Object> rMessage = new HashMap<String, Object>();
         Object tObj;
         String tStr;
-
-
 
         //Шаг 1.
         for(AccountBodyFields value: AccountBodyFields.values()){
@@ -39,14 +36,9 @@ public class CheckerAccount  implements UnaryOperator<Model> {
                     rMessage.put("ErrorCode",(Object) "400");
                     model.setrMessage(rMessage);
                     return model;
-
-
-
                 }
             }
         }
-
-
         return null;
     }
 }

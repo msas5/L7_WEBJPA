@@ -8,11 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.msas.services.AccountService;
 import ru.msas.services.InstanceService;
-
 import java.util.*;
-
 import static java.lang.Integer.parseInt;
-
 
 @RestController
 public class WebController {
@@ -31,7 +28,6 @@ public class WebController {
         Model model = dataReader.get();
         model.setRqMap(dtoRequest);
         model = checkerInstance.apply(model);
-
 
         Map<String,Object> rMap = instanceService.Create(model);
         Map<String,Object> rMessage = new HashMap<String,Object>();
