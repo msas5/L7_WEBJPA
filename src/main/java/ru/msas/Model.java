@@ -1,8 +1,10 @@
 package ru.msas;
 
 import ru.msas.entity.TppProductRegister;
+import ru.msas.entity.TppRefProductRegisterType;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Model {
@@ -16,6 +18,17 @@ public class Model {
     }
 
     private Boolean isError;
+
+
+    public void setInstanceExists(Boolean instanceExists) {
+        isInstanceExists = instanceExists;
+    }
+
+    public Boolean getInstanceExists() {
+        return isInstanceExists;
+    }
+
+    private Boolean isInstanceExists;
 
     public Map<String, Object> getrMessage() {
         return rMessage;
@@ -35,7 +48,17 @@ public class Model {
         return alArrangement;
     }
 
-    ArrayList<Map<String, Object>> alArrangement;
+
+    public List<TppRefProductRegisterType> getlProductRegistertType() {
+        return lProductRegistertType;
+    }
+
+    public void setlProductRegistertType(List<TppRefProductRegisterType> lProductRegistertType) {
+        this.lProductRegistertType = lProductRegistertType;
+    }
+
+    private List<TppRefProductRegisterType> lProductRegistertType;
+    private ArrayList<Map<String, Object>> alArrangement;
     private Map<String,Object> rqMap;
     public Map<String, Object> getRqMap() {
         return rqMap;

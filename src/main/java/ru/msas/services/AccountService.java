@@ -34,6 +34,7 @@ public class AccountService {
         //Проверка таблицы ПР tppProductRegister на дубли по tppProductRegister.productId == Request.Body.instanceId
         //У результата отобрать tppProductRegister.type=Request.Body.registryTypeCode.
         String sInstanceId = (String) rqMap.get("instanceId");
+        model.setInstanceExists(true);
         Long instanceId = Long.parseLong(sInstanceId);
         String registryTypeCode = (String) rqMap.get("registryTypeCode");
 

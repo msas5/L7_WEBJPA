@@ -71,7 +71,6 @@ public class WebController {
         model.setError(false);
         model.setRqMap(dtoRequest);
         model = checkerAccount.apply(model);
-
        model = accountService.Create(model);
        if (model.getError() == true){
        Map<String,Object> rMessage = new HashMap<String,Object>();
