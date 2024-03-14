@@ -1,6 +1,7 @@
-package ru.msas;
+package ru.msas.checker;
 
 import org.springframework.stereotype.Component;
+import ru.msas.Model;
 import ru.msas.enums.AccountBodyFields;
 import java.util.HashMap;
 import java.util.Map;
