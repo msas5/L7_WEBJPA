@@ -1,5 +1,6 @@
 package ru.msas.writer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.msas.Model;
@@ -14,6 +15,8 @@ import java.util.function.UnaryOperator;
 
 @Component
 public class WriterAccount  implements UnaryOperator<Model> {
+
+    @Autowired
     TppProductRegisterRepo tppProductRegister;
 
     @Transactional

@@ -1,5 +1,6 @@
 package ru.msas.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.msas.entity.*;
 import ru.msas.repo.*;
@@ -7,13 +8,17 @@ import java.util.*;
 
 @Service
 public class InstanceService {
-    // @Autowired
+
+    @Autowired
     TppProductRepo tppProduct;
-    // @Autowired
+
+    @Autowired
     AgreementRepo agreement;
-    //@Autowired
+
+    @Autowired
     TppRefProductClassRepo tppProductClass;
-    //@Autowired
+
+    @Autowired
     TppRefProductRegisterTypeRepo tppRefProductRegisterType;
 
     public ru.msas.Model Create(ru.msas.Model model) {

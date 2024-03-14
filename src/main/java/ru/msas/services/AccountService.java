@@ -1,5 +1,6 @@
 package ru.msas.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.msas.entity.Account;
 import ru.msas.entity.AccountPool;
@@ -14,13 +15,15 @@ import java.util.Map;
 @Service
 public class AccountService {
 
-    //@Autowired
+    @Autowired
     TppRefProductRegisterTypeRepo tppRefProductRegisterType;
-    //@Autowired
+
+    @Autowired
     TppProductRegisterRepo tppProductRegister;
-    //@Autowired
+    @Autowired
     AccountPoolRepo accountPool;
-    //@Autowired
+
+    @Autowired
     AccountRepo account;
 
     public ru.msas.Model Create(ru.msas.Model model) {

@@ -1,4 +1,5 @@
 package ru.msas.writer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.msas.Model;
@@ -9,22 +10,23 @@ import ru.msas.entity.TppRefProductRegisterType;
 import ru.msas.repo.AgreementRepo;
 import ru.msas.repo.TppProductRegisterRepo;
 import ru.msas.repo.TppProductRepo;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 
 @Component
 public class WriterInstance  implements UnaryOperator<Model> {
-    // @Autowired
+
+    @Autowired
     TppProductRepo tppProduct;
-    //@Autowired
+
+    @Autowired
     TppProductRegisterRepo tppProductRegister;
 
-    // @Autowired
+    @Autowired
     AgreementRepo agreement;
+
     @Transactional
     @Override
     public Model apply(Model model) {
