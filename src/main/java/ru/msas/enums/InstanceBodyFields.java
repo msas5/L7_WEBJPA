@@ -1,4 +1,4 @@
-package ru.msas;
+package ru.msas.enums;
 
 public enum InstanceBodyFields {
     instanceId(false, true),

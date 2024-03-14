@@ -1,4 +1,4 @@
-package ru.msas;
+package ru.msas.enums;
 
 public enum StatePRegisterEnum {
    CLOSED (0,"Закрыт"),
