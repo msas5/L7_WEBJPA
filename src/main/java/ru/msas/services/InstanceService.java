@@ -45,7 +45,7 @@ public class InstanceService {
 
                 rMessage.clear();
                 rMessage.put("Error", (Object) "400/Bad Request. Repeated record in tppProduct for contractNumber = " + contractNumber + " Count repeated records is " + iCnt);
-                rMessage.put("ErrorCode",(Object) "400");
+                rMessage.put("ErrorCode", (Object) "400");
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
@@ -66,7 +66,7 @@ public class InstanceService {
             if (agreementNumberCount > 0) {
                 rMessage.clear();
                 rMessage.put("Error", (Object) "400/Bad Request. Repeated record in agreement table for numbers = " + lnumberDs.toString() + " Count repeated records is " + agreementNumberCount);
-                rMessage.put("ErrorCode",(Object) "400");
+                rMessage.put("ErrorCode", (Object) "400");
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
@@ -83,11 +83,11 @@ public class InstanceService {
             if (lProductCode.size() == 0) {
                 rMessage.clear();
                 rMessage.put("Error", (Object) "404/Bad Request. Not fond records in tppRefProductClass for productcode = " + productCode);
-                rMessage.put("ErrorCode",(Object) "404");
+                rMessage.put("ErrorCode", (Object) "404");
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
-                            }
+            }
             //Среди найденных строк отобрать те,у которых tppRefProductRegisterType.accountType = "Клиентский"
             List<TppRefProductClass> lProductCodeClient = new ArrayList<>();
             List<TppRefProductRegisterType> lProductRegistertType = new ArrayList<>();
@@ -107,7 +107,7 @@ public class InstanceService {
             if (lProductCodeClient.size() == 0) {
                 rMessage.clear();
                 rMessage.put("Error", (Object) "404/Bad Request. Not fond records where tppRefProductRegisterType.accountType = Clients");
-                rMessage.put("ErrorCode",(Object) "404");
+                rMessage.put("ErrorCode", (Object) "404");
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
@@ -121,10 +121,9 @@ public class InstanceService {
             rMessage.clear();
             tStr = "200 All Good!!! ";
             rMessage.put("Ok", (Object) tStr);
-            rMessage.put("ErrorCode",(Object) "200");
+            rMessage.put("ErrorCode", (Object) "200");
             model.setrMessage(rMessage);
             return model;
-
 
 
         } else {
@@ -139,7 +138,7 @@ public class InstanceService {
                 rMessage.clear();
                 tStr = "404/Product object for instance <" + instanceId.toString() + "> not found ";
                 rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode",(Object) "404");
+                rMessage.put("ErrorCode", (Object) "404");
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
@@ -161,7 +160,7 @@ public class InstanceService {
                 rMessage.clear();
                 tStr = "404/Agrrement for parameter <" + lnumberDs.toString() + "> alredy exsits. ";
                 rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode",(Object) "400");
+                rMessage.put("ErrorCode", (Object) "400");
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
@@ -176,28 +175,18 @@ public class InstanceService {
                 rMessage.clear();
                 tStr = "400/Bad make completed object for class agreement " + e.getMessage();
                 rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode",(Object) "400");
+                rMessage.put("ErrorCode", (Object) "400");
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
 
             }
-            try {
-                Agreement agreementWasSaved = agreement.save(agreementForSave);
-            } catch (Exception e) {
-                rMessage.clear();
-                tStr = "400/Bad save completed object for class agreement " + e.getMessage();
-                rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode",(Object) "400");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
-
-            }
+            model.setAgreementForSave(agreementForSave);
+            return model;
         }
 
-        return model;
     }
 }
+
 
 

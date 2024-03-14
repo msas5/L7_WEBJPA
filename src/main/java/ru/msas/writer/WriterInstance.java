@@ -2,9 +2,11 @@ package ru.msas.writer;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.msas.Model;
+import ru.msas.entity.Agreement;
 import ru.msas.entity.TppProduct;
 import ru.msas.entity.TppProductRegister;
 import ru.msas.entity.TppRefProductRegisterType;
+import ru.msas.repo.AgreementRepo;
 import ru.msas.repo.TppProductRegisterRepo;
 import ru.msas.repo.TppProductRepo;
 
@@ -20,6 +22,9 @@ public class WriterInstance  implements UnaryOperator<Model> {
     TppProductRepo tppProduct;
     //@Autowired
     TppProductRegisterRepo tppProductRegister;
+
+    // @Autowired
+    AgreementRepo agreement;
     @Transactional
     @Override
     public Model apply(Model model) {
@@ -95,7 +100,18 @@ public class WriterInstance  implements UnaryOperator<Model> {
 
         } else
         {
+            try {
+                Agreement agreementWasSaved = agreement.save(model.getAgreementForSave());
+            } catch (Exception e) {
+                rMessage.clear();
+                tStr = "400/Bad save completed object for class agreement " + e.getMessage();
+                rMessage.put("Error", (Object) tStr);
+                rMessage.put("ErrorCode",(Object) "400");
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
+            }
 
 
 

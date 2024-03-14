@@ -1,5 +1,6 @@
 package ru.msas;
 
+import ru.msas.entity.Agreement;
 import ru.msas.entity.TppProductRegister;
 import ru.msas.entity.TppRefProductRegisterType;
 
@@ -73,6 +74,16 @@ public class Model {
     }
 
     private TppProductRegister tppProductRegisterForSave;
+
+    public Agreement getAgreementForSave() {
+        return agreementForSave;
+    }
+
+    public void setAgreementForSave(Agreement agreementForSave) {
+        this.agreementForSave = agreementForSave;
+    }
+
+    private Agreement agreementForSave;
 
     public void setRqMap(Map<String, Object> rqMap) {
         this.rqMap = rqMap;

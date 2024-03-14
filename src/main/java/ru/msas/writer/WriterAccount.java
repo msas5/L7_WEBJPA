@@ -11,10 +11,12 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
-@Transactional
+
 @Component
 public class WriterAccount  implements UnaryOperator<Model> {
     TppProductRegisterRepo tppProductRegister;
+
+    @Transactional
     @Override
     public Model apply(Model model) {
         Map<String, Object> rMessage = new HashMap<String, Object>();
