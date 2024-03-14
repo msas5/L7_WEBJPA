@@ -21,7 +21,7 @@ public class InstanceService {
     TppProductRegisterRepo tppProductRegister;
     //@Autowired
 
-    public Map<String, Object> Create(ru.msas.Model model) {
+    public ru.msas.Model Create(ru.msas.Model model) {
 
         Map<String, Object> rqMap = model.getRqMap();
         Map<String, Object> rMessage = new HashMap<String, Object>();
@@ -47,7 +47,9 @@ public class InstanceService {
                 rMessage.clear();
                 rMessage.put("Error", (Object) "400/Bad Request. Repeated record in tppProduct for contractNumber = " + contractNumber + " Count repeated records is " + iCnt);
                 rMessage.put("ErrorCode",(Object) "400");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
             }
 
@@ -66,7 +68,9 @@ public class InstanceService {
                 rMessage.clear();
                 rMessage.put("Error", (Object) "400/Bad Request. Repeated record in agreement table for numbers = " + lnumberDs.toString() + " Count repeated records is " + agreementNumberCount);
                 rMessage.put("ErrorCode",(Object) "400");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
             }
 
@@ -81,7 +85,9 @@ public class InstanceService {
                 rMessage.clear();
                 rMessage.put("Error", (Object) "404/Bad Request. Not fond records in tppRefProductClass for productcode = " + productCode);
                 rMessage.put("ErrorCode",(Object) "404");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
                             }
             //Среди найденных строк отобрать те,у которых tppRefProductRegisterType.accountType = "Клиентский"
             List<TppRefProductClass> lProductCodeClient = new ArrayList<>();
@@ -103,7 +109,9 @@ public class InstanceService {
                 rMessage.clear();
                 rMessage.put("Error", (Object) "404/Bad Request. Not fond records where tppRefProductRegisterType.accountType = Clients");
                 rMessage.put("ErrorCode",(Object) "404");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
 
             }
@@ -120,7 +128,11 @@ public class InstanceService {
                 tStr = "400/Bad make completed object for class TppProduct " + e.getMessage();
                 rMessage.put("Error", (Object) tStr);
                 rMessage.put("ErrorCode",(Object) "400");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
             }
             TppProduct tppProductWasSaved;
@@ -131,7 +143,9 @@ public class InstanceService {
                 tStr = "400/Bad save completed object for class TppProduct " + e.getMessage();
                 rMessage.put("Error", (Object) tStr);
                 rMessage.put("ErrorCode",(Object) "400");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
             }
 
@@ -150,7 +164,9 @@ public class InstanceService {
                 tStr = "400/Bad make completed object for class tppProductRegister " + e.getMessage();
                 rMessage.put("Error", (Object) tStr);
                 rMessage.put("ErrorCode",(Object) "400");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
             }
             //Добавить в таблицу ПР tppProductRegistry строки id, productId,type,account_id,currencyCode,state
@@ -161,7 +177,9 @@ public class InstanceService {
                 tStr = "400/Bad save completed object for class tppProductRegister " + e.getMessage();
                 rMessage.put("Error", (Object) tStr);
                 rMessage.put("ErrorCode",(Object) "400");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
             }
 
@@ -169,7 +187,8 @@ public class InstanceService {
             tStr = "200 All Good!!! ";
             rMessage.put("Ok", (Object) tStr);
             rMessage.put("ErrorCode",(Object) "200");
-            return rMessage;
+            model.setrMessage(rMessage);
+            return model;
 
 
 
@@ -185,7 +204,9 @@ public class InstanceService {
                 tStr = "404/Product object for instance <" + instanceId.toString() + "> not found ";
                 rMessage.put("Error", (Object) tStr);
                 rMessage.put("ErrorCode",(Object) "404");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
             }
 
@@ -205,7 +226,9 @@ public class InstanceService {
                 tStr = "404/Agrrement for parameter <" + lnumberDs.toString() + "> alredy exsits. ";
                 rMessage.put("Error", (Object) tStr);
                 rMessage.put("ErrorCode",(Object) "400");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
             }
             //***********************************************************************
@@ -218,7 +241,9 @@ public class InstanceService {
                 tStr = "400/Bad make completed object for class agreement " + e.getMessage();
                 rMessage.put("Error", (Object) tStr);
                 rMessage.put("ErrorCode",(Object) "400");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
             }
             try {
@@ -228,12 +253,14 @@ public class InstanceService {
                 tStr = "400/Bad save completed object for class agreement " + e.getMessage();
                 rMessage.put("Error", (Object) tStr);
                 rMessage.put("ErrorCode",(Object) "400");
-                return rMessage;
+                model.setError(true);
+                model.setrMessage(rMessage);
+                return model;
 
             }
         }
 
-        return rqMap;
+        return model;
     }
 }
 
