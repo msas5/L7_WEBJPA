@@ -8,6 +8,7 @@ public class DataReader implements Supplier<Model> {
     @Override
     public Model get() {
         Model model = new Model();
+        model.setError(false);
         return model;
     }
 }

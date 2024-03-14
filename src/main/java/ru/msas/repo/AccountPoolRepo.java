@@ -8,5 +8,4 @@ import java.util.List;
 public interface AccountPoolRepo extends JpaRepository<AccountPool,Long> {
 
     List<AccountPool> findTopByBranchCodeAndCurrencyCodeAndMdmCodeAndPriorityCodeAndRegistryTypeCodeOrderByIdAsc(String branchCode, String currencyCode, String mdmCode, String priorityCode, String registryTypeCode);
-
 }

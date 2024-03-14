@@ -7,6 +7,4 @@ import java.util.List;
 public interface TppProductRegisterRepo extends JpaRepository<TppProductRegister,Long> {
 
     List<TppProductRegister> findByProductIdAndType(Long productId,String type);
-
-
 }

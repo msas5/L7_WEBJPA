@@ -2,9 +2,7 @@ package ru.msas.services;
 
 import org.springframework.stereotype.Service;
 import ru.msas.entity.*;
-
 import ru.msas.repo.*;
-
 import java.util.*;
 
 @Service
@@ -18,8 +16,6 @@ public class InstanceService {
     //@Autowired
     TppRefProductRegisterTypeRepo tppRefProductRegisterType;
 
-    //@Autowired
-
     public ru.msas.Model Create(ru.msas.Model model) {
 
         Map<String, Object> rqMap = model.getRqMap();
@@ -29,7 +25,6 @@ public class InstanceService {
 
         tObj = rqMap.get("instanceId");
         String sInstanceId = (String) tObj;
-
 
         //Шаг 2.
         if (tObj == null || sInstanceId.isEmpty()) {
@@ -49,9 +44,7 @@ public class InstanceService {
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
-
             }
-
 
             //Шаг 1.2
             //Проверка таблицы agreement на дубли
@@ -70,9 +63,7 @@ public class InstanceService {
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
-
             }
-
 
             //Шаг 1.3
             //Поиск связанных записей в Каталоге Типа регистра
@@ -88,6 +79,7 @@ public class InstanceService {
                 model.setrMessage(rMessage);
                 return model;
             }
+
             //Среди найденных строк отобрать те,у которых tppRefProductRegisterType.accountType = "Клиентский"
             List<TppRefProductClass> lProductCodeClient = new ArrayList<>();
             List<TppRefProductRegisterType> lProductRegistertType = new ArrayList<>();
@@ -111,12 +103,9 @@ public class InstanceService {
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
-
-
             }
 
             model.setlProductRegistertType(lProductRegistertType);
-
 
             rMessage.clear();
             tStr = "200 All Good!!! ";
@@ -124,8 +113,6 @@ public class InstanceService {
             rMessage.put("ErrorCode", (Object) "200");
             model.setrMessage(rMessage);
             return model;
-
-
         } else {
             //************************************* По Instance not null **********************************************
             model.setInstanceExists(true);
@@ -142,7 +129,6 @@ public class InstanceService {
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
-
             }
 
             //Шаг 2.2
@@ -164,7 +150,6 @@ public class InstanceService {
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
-
             }
             //***********************************************************************
             //!!!Шаг 8. Добавить строку в таблицу ДС(agreement),сформировать agreement.id, связать с таблицей ЭП
@@ -179,12 +164,10 @@ public class InstanceService {
                 model.setError(true);
                 model.setrMessage(rMessage);
                 return model;
-
             }
             model.setAgreementForSave(agreementForSave);
             return model;
         }
-
     }
 }
 

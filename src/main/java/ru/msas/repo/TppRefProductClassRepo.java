@@ -7,6 +7,4 @@ import java.util.List;
 public interface TppRefProductClassRepo extends JpaRepository<TppRefProductClass,Long> {
 
     List<TppRefProductClass>  findByValue(String value);
-
-
 }

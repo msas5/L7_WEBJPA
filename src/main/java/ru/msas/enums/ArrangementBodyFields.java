@@ -26,10 +26,8 @@ public enum ArrangementBodyFields {
     public Boolean isRequired;
     Boolean isBody;
 
-
     ArrangementBodyFields(Boolean isRequired, Boolean isBody){
         this.isBody   = isBody;
         this.isRequired = isRequired;
     }
-
 }

@@ -1,7 +1,6 @@
 package ru.msas.entity;
 
 import jakarta.persistence.*;
-
 import java.util.Map;
 
 @Entity
@@ -53,8 +52,8 @@ public class TppProductRegister {
     TppProductRegister(){}
     public TppProductRegister(Map<String, Object> rqMap){
         String sTr = (String) rqMap.get("instanceId");
-      this.productId = Long.parseLong(sTr);
-      this.type = (String) rqMap.get("type");
+        this.productId = Long.parseLong(sTr);
+        this.type = (String) rqMap.get("type");
 
     }
 }

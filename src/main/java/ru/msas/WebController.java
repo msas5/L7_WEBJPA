@@ -11,20 +11,16 @@ import ru.msas.services.AccountService;
 import ru.msas.services.InstanceService;
 import ru.msas.writer.WriterAccount;
 import ru.msas.writer.WriterInstance;
-
 import java.util.*;
 import static java.lang.Integer.parseInt;
 
 @RestController
 public class WebController {
 
-
     @Autowired
     WriterInstance writerInstance;
-
     @Autowired
     WriterAccount writerAccount;
-
     @Autowired
     DataReader dataReader;
     @Autowired
@@ -38,10 +34,10 @@ public class WebController {
     public ResponseEntity<Map <String, Object>> corporateSettlementInstanseCreate(@RequestBody Map<String, Object> dtoRequest){
 
         Model model = dataReader.get();
-        model.setError(false);
         model.setRqMap(dtoRequest);
 
         model = checkerInstance.apply(model);
+
         model = instanceService.Create(model);
         Map<String,Object> rqMap = model.getRqMap();
         Map<String,Object> rMessage = new HashMap<String,Object>();
@@ -56,7 +52,6 @@ public class WebController {
 
         model = writerInstance.apply(model);
 
-
         //Отправить данные в систему источник запроса на создание экземпляра продукта
         rMessage.clear();
         String tStr = "200/ok ";
@@ -68,7 +63,6 @@ public class WebController {
     public ResponseEntity<Map <String, Object>>  corporateSettlementAccountCreate(@RequestBody Map<String, Object> dtoRequest){
 
         Model model = dataReader.get();
-        model.setError(false);
         model.setRqMap(dtoRequest);
         model = checkerAccount.apply(model);
        model = accountService.Create(model);

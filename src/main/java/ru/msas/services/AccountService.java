@@ -5,10 +5,8 @@ import ru.msas.entity.Account;
 import ru.msas.entity.AccountPool;
 import ru.msas.entity.TppProductRegister;
 import ru.msas.entity.TppRefProductRegisterType;
-import ru.msas.enums.AccountBodyFields;
 import ru.msas.enums.StatePRegisterEnum;
 import ru.msas.repo.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +36,6 @@ public class AccountService {
         Long instanceId = Long.parseLong(sInstanceId);
         String registryTypeCode = (String) rqMap.get("registryTypeCode");
 
-
         List<TppProductRegister> lTppProductRegisterInstance;
         try {
             lTppProductRegisterInstance = tppProductRegister.findByProductIdAndType(instanceId, registryTypeCode);
@@ -62,7 +59,6 @@ public class AccountService {
             return model;
         }
 
-
         //Шаг 3.
         //Найти запись в tppRefProductRegisterType.value по значению Request.Body.registryTypeCode
         List<TppRefProductRegisterType> lTppRefProductRegisterType = tppRefProductRegisterType.findByValue(registryTypeCode);
@@ -80,7 +76,6 @@ public class AccountService {
         //Шаг 4.
         //Сформировать новый продуктовый регистр и записать его в БД
         //Найти значение номера счета по параметрам branchCode,currencyCode,mdbCode,priorityCode,registryTypeCode в таблице accoutPool
-
         String branchCode = (String) rqMap.get("branchCode");
         String currencyCode = (String) rqMap.get("currencyCode");
         String mdmCode = (String) rqMap.get("mdmCode");
@@ -142,9 +137,6 @@ public class AccountService {
         }
 
         model.setTppProductRegisterForSave(tppProductRegisterForSave);
-
-
-
         return model;
     }
 }

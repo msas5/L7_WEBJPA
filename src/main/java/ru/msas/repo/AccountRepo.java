@@ -8,5 +8,4 @@ import java.util.List;
 public interface AccountRepo extends JpaRepository<Account,Long> {
 
       List<Account> findByAccountPoolIdAndBussyOrderByIdAsc(Long accountPoolId, Boolean bussy);
-
 }
