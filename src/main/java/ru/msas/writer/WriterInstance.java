@@ -1,4 +1,5 @@
 package ru.msas.writer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,13 +8,15 @@ import ru.msas.entity.Agreement;
 import ru.msas.entity.TppProduct;
 import ru.msas.entity.TppProductRegister;
 import ru.msas.entity.TppRefProductRegisterType;
+import ru.msas.exceptions.SaveAgreementException;
+import ru.msas.exceptions.SaveTppProductException;
+import ru.msas.exceptions.SaveTppProductRegisterException;
 import ru.msas.repo.AgreementRepo;
 import ru.msas.repo.TppProductRegisterRepo;
 import ru.msas.repo.TppProductRepo;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.UnaryOperator;
-
 
 @Component
 public class WriterInstance  implements UnaryOperator<Model> {
@@ -31,7 +34,7 @@ public class WriterInstance  implements UnaryOperator<Model> {
     @Override
     public Model apply(Model model) {
         Map<String, Object> rMessage = new HashMap<String, Object>();
-        String tStr;
+        String sErrorMessage;
         if (model.getInstanceExists() == false) {
             //todo Необходимо сделать транзакцию с записываемыми далее двумя таблицами
             //Шаг 1.4
@@ -40,31 +43,17 @@ public class WriterInstance  implements UnaryOperator<Model> {
             try {
                 tppProductForSave = new TppProduct(model.getRqMap());
             } catch (Exception e) {
-                rMessage.clear();
-                tStr = "400/Bad make completed object for class TppProduct " + e.getMessage();
-                rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode",(Object) "400");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
+                sErrorMessage = "Bad make completed object for class TppProduct " + e.getMessage();
+                throw new SaveTppProductException(sErrorMessage);
 
             }
             TppProduct tppProductWasSaved;
             try {
                 tppProductWasSaved = tppProduct.save(tppProductForSave);
             } catch (Exception e) {
-                rMessage.clear();
-                tStr = "400/Bad save completed object for class TppProduct " + e.getMessage();
-                rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode",(Object) "400");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
-
+                sErrorMessage = "Bad save completed object for class TppProduct " + e.getMessage();
+                throw new SaveTppProductException(sErrorMessage);
             }
-
 
             //Шаг 1.5
             String sInstanceId = tppProductWasSaved.getId();
@@ -77,50 +66,26 @@ public class WriterInstance  implements UnaryOperator<Model> {
             try {
                 tppProductRegisterForSave = new TppProductRegister(rqMap);
             } catch (Exception e) {
-                rMessage.clear();
-                tStr = "400/Bad make completed object for class tppProductRegister " + e.getMessage();
-                rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode",(Object) "400");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
-
+                sErrorMessage = "Bad make completed object for class tppProductRegister " + e.getMessage();
+                throw new SaveTppProductRegisterException(sErrorMessage);
             }
             //Добавить в таблицу ПР tppProductRegistry строки id, productId,type,account_id,currencyCode,state
             try {
                 TppProductRegister tppProductRegisterWasSaved = tppProductRegister.save(tppProductRegisterForSave);
             } catch (Exception e) {
-                rMessage.clear();
-                tStr = "400/Bad save completed object for class tppProductRegister " + e.getMessage();
-                rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode",(Object) "400");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
-
+                sErrorMessage = "Bad save completed object for class tppProductRegister " + e.getMessage();
+                throw new SaveTppProductRegisterException(sErrorMessage);
             }
-
         } else
         {
             try {
                 Agreement agreementWasSaved = agreement.save(model.getAgreementForSave());
             } catch (Exception e) {
-                rMessage.clear();
-                tStr = "400/Bad save completed object for class agreement " + e.getMessage();
-                rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode",(Object) "400");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
-
+                sErrorMessage = "400/Bad save completed object for class agreement " + e.getMessage();
+                throw new SaveAgreementException(sErrorMessage);
             }
-
-
-
-
         }
 
-        return null;
+        return model;
     }
 }
-

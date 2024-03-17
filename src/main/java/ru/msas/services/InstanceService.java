@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.msas.entity.*;
 import ru.msas.repo.*;
+import ru.msas.exceptions.*;
 import java.util.*;
 
 @Service
@@ -24,9 +25,8 @@ public class InstanceService {
     public ru.msas.Model Create(ru.msas.Model model) {
 
         Map<String, Object> rqMap = model.getRqMap();
-        Map<String, Object> rMessage = new HashMap<String, Object>();
+        String sErrorMessage;
         Object tObj;
-        String tStr;
 
         tObj = rqMap.get("instanceId");
         String sInstanceId = (String) tObj;
@@ -42,13 +42,8 @@ public class InstanceService {
             int iCnt = tppProduct.findByNumber(contractNumber);
             //Если строки есть, значит имеются повторы, то return 400
             if (iCnt > 0) {
-
-                rMessage.clear();
-                rMessage.put("Error", (Object) "400/Bad Request. Repeated record in tppProduct for contractNumber = " + contractNumber + " Count repeated records is " + iCnt);
-                rMessage.put("ErrorCode", (Object) "400");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
+                sErrorMessage = "Repeated record in tppProduct for contractNumber = " + contractNumber + " Count repeated records is " + iCnt;
+                throw new BadRequestException(sErrorMessage);
             }
 
             //Шаг 1.2
@@ -62,12 +57,8 @@ public class InstanceService {
             Integer agreementNumberCount = agreement.CountByNumberIn(lnumberDs);
             //Если строки есть, значит имеются повторы, то return 400
             if (agreementNumberCount > 0) {
-                rMessage.clear();
-                rMessage.put("Error", (Object) "400/Bad Request. Repeated record in agreement table for numbers = " + lnumberDs.toString() + " Count repeated records is " + agreementNumberCount);
-                rMessage.put("ErrorCode", (Object) "400");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
+                sErrorMessage = "Repeated record in agreement table for numbers = " + lnumberDs.toString() + " Count repeated records is " + agreementNumberCount;
+                throw new BadRequestException(sErrorMessage);
             }
 
             //Шаг 1.3
@@ -77,12 +68,8 @@ public class InstanceService {
 
             List<TppRefProductClass> lProductCode = tppProductClass.findByValue(productCode);
             if (lProductCode.size() == 0) {
-                rMessage.clear();
-                rMessage.put("Error", (Object) "404/Bad Request. Not fond records in tppRefProductClass for productcode = " + productCode);
-                rMessage.put("ErrorCode", (Object) "404");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
+                sErrorMessage = "Not fond records in tppRefProductClass for productcode = " + productCode;
+                throw new NotFoundException(sErrorMessage);
             }
 
             //Среди найденных строк отобрать те,у которых tppRefProductRegisterType.accountType = "Клиентский"
@@ -102,21 +89,12 @@ public class InstanceService {
 
             //Если записей не найдено, то return 404
             if (lProductCodeClient.size() == 0) {
-                rMessage.clear();
-                rMessage.put("Error", (Object) "404/Bad Request. Not fond records where tppRefProductRegisterType.accountType = Clients");
-                rMessage.put("ErrorCode", (Object) "404");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
+                sErrorMessage = "Not fond records where tppRefProductRegisterType.accountType = Clients";
+                throw new NotFoundException(sErrorMessage);
             }
 
             model.setlProductRegistertType(lProductRegistertType);
 
-            rMessage.clear();
-            tStr = "200 All Good!!! ";
-            rMessage.put("Ok", (Object) tStr);
-            rMessage.put("ErrorCode", (Object) "200");
-            model.setrMessage(rMessage);
             return model;
         } else {
             //************************************* По Instance not null **********************************************
@@ -127,13 +105,8 @@ public class InstanceService {
             Optional<TppProduct> oProduct = tppProduct.findById(instanceId);
             if (oProduct.isEmpty()) {
                 //Если запись не найдена, то return 404 Экземплар продуктс с параметром instance не найден
-                rMessage.clear();
-                tStr = "404/Product object for instance <" + instanceId.toString() + "> not found ";
-                rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode", (Object) "404");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
+                sErrorMessage = "404/Product object for instance <" + instanceId.toString() + "> not found ";
+                throw new NotFoundException(sErrorMessage);
             }
 
             //Шаг 2.2
@@ -148,13 +121,8 @@ public class InstanceService {
             Integer agreementNumberCount = agreement.CountByNumberIn(lnumberDs);
             //Если записи найдены, то return 404  Параметр N Доп.соглашения уже существует..
             if (agreementNumberCount > 0) {
-                rMessage.clear();
-                tStr = "404/Agrrement for parameter <" + lnumberDs.toString() + "> alredy exsits. ";
-                rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode", (Object) "400");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
+                sErrorMessage = "Agreement for parameter <" + lnumberDs.toString() + "> alredy exsits";
+                throw new NotFoundException(sErrorMessage);
             }
             //***********************************************************************
             //!!!Шаг 8. Добавить строку в таблицу ДС(agreement),сформировать agreement.id, связать с таблицей ЭП
@@ -162,19 +130,11 @@ public class InstanceService {
             try {
                 agreementForSave = new Agreement(instanceId);
             } catch (Exception e) {
-                rMessage.clear();
-                tStr = "400/Bad make completed object for class agreement " + e.getMessage();
-                rMessage.put("Error", (Object) tStr);
-                rMessage.put("ErrorCode", (Object) "400");
-                model.setError(true);
-                model.setrMessage(rMessage);
-                return model;
+                sErrorMessage = "Bad make completed object for class agreement " + e.getMessage();
+                throw new SaveAgreementException(sErrorMessage);
             }
             model.setAgreementForSave(agreementForSave);
             return model;
         }
     }
 }
-
-
-

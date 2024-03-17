@@ -5,11 +5,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.msas.Model;
 import ru.msas.entity.TppProductRegister;
+import ru.msas.exceptions.SaveTppProductRegisterException;
 import ru.msas.repo.TppProductRegisterRepo;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 
@@ -22,20 +19,14 @@ public class WriterAccount  implements UnaryOperator<Model> {
     @Transactional
     @Override
     public Model apply(Model model) {
-        Map<String, Object> rMessage = new HashMap<String, Object>();
 
         try {
-            TppProductRegister tppProductRegisterWasSaved = tppProductRegister.save(model.getTppProductRegisterForSave());
+            TppProductRegister tppProductRegisterWasSaved = tppProductRegister
+                    .save(model.getTppProductRegisterForSave());
         } catch (Exception e) {
-            rMessage.clear();
-            String tStr = "400/Error for save tppProductRegister";
-            rMessage.put("Error", (Object) tStr + " " + e.getMessage());
-            rMessage.put("ErrorCode", (Object) "400");
-            model.setrMessage(rMessage);
-            model.setError(true);
-            return model;
+            String tStr = "Error for save tppProductRegister " + e.getMessage();
+            throw new SaveTppProductRegisterException(tStr);
         }
-
         return model;
     }
 }

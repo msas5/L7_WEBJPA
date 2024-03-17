@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 import ru.msas.Model;
 import ru.msas.enums.ArrangementBodyFields;
 import ru.msas.enums.InstanceBodyFields;
+import ru.msas.exceptions.BadRequestException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
@@ -14,9 +14,9 @@ public class CheckerInstance implements UnaryOperator<Model> {
     @Override
     public Model apply(Model model) {
         Map<String, Object> rqMap = model.getRqMap();
-        Map<String, Object> rMessage = new HashMap<String, Object>();
         Object tObj;
         String tStr;
+        String sErrorMessage;
 
         for (InstanceBodyFields value : InstanceBodyFields.values()) {
             if (value.isRequired == true) {
@@ -24,17 +24,12 @@ public class CheckerInstance implements UnaryOperator<Model> {
                 try {
                     tStr = (String) (tObj);
                 } catch (Exception e) {
-                    rMessage.clear();
-                    rMessage.put("Error", (Object) "String = (String)tobj for value '" + value.name() + "'" + e.getMessage());
-                    rMessage.put("ErrorCode",(Object) "400");
-                    model.setrMessage(rMessage);
-                    return model;
+                    sErrorMessage = "String = (String)tobj for value '" + value.name() + "'" + e.getMessage();
+                    throw new BadRequestException(sErrorMessage);
                 }
                 if (tObj == null || tStr.isEmpty()) {
-                    rMessage.put("Error", (Object) "400/Bad Request. Required Parameter <" + value.name() + "> is Empty");
-                    rMessage.put("ErrorCode",(Object) "400");
-                    model.setrMessage(rMessage);
-                    return model;
+                    sErrorMessage = "Bad Request. Required Parameter <" + value.name() + "> is Empty";
+                    throw new BadRequestException(sErrorMessage);
                 }
             }
         }
@@ -47,13 +42,8 @@ public class CheckerInstance implements UnaryOperator<Model> {
         try {
             alArrangement = (ArrayList<Map<String, Object>>) tObjarrangement;
         } catch (Exception e) {
-            String st = e.getMessage();
-            rMessage.clear();
-            rMessage.put("Error", (Object) "400/ " + st);
-            rMessage.put("ErrorCode",(Object) "400");
-            model.setrMessage(rMessage);
-            return model;
-
+            sErrorMessage = "Error for getting Arrangement section of your request " + e.getMessage();
+            throw new BadRequestException(sErrorMessage);
         }
         int iLength = alArrangement.size();
         for (int i = 0; i < iLength; i++) {
@@ -67,11 +57,8 @@ public class CheckerInstance implements UnaryOperator<Model> {
                     tObj = mArrangementMap.get(value.name());
                     tStr = (String) (tObj);
                     if (tObj == null || tStr.isEmpty()) {
-                        rMessage.clear();
-                        rMessage.put("Error", (Object) "400/Bad Request. Required Parameter <" + value.name() + "> is Empty in arrangement array N" + i);
-                        rMessage.put("ErrorCode", (Object) "400");
-                        model.setrMessage(rMessage);
-                        return model;
+                        sErrorMessage = "Bad Request. Required Parameter <" + value.name() + "> is Empty in arrangement array N" + i;
+                        throw new BadRequestException(sErrorMessage);
                     }
                 }
             }

@@ -7,6 +7,7 @@ import ru.msas.entity.AccountPool;
 import ru.msas.entity.TppProductRegister;
 import ru.msas.entity.TppRefProductRegisterType;
 import ru.msas.enums.StatePRegisterEnum;
+import ru.msas.exceptions.*;
 import ru.msas.repo.*;
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +29,7 @@ public class AccountService {
 
     public ru.msas.Model Create(ru.msas.Model model) {
         Map<String, Object> rqMap = model.getRqMap();
-        Map<String, Object> rMessage = new HashMap<String, Object>();
-        String tStr;
+        String sErrorMessage;
 
         //Шаг 2.
         //Проверка таблицы ПР tppProductRegister на дубли по tppProductRegister.productId == Request.Body.instanceId
@@ -43,23 +43,13 @@ public class AccountService {
         try {
             lTppProductRegisterInstance = tppProductRegister.findByProductIdAndType(instanceId, registryTypeCode);
         } catch (Exception e) {
-            rMessage.clear();
-            tStr = "400/Error for findByProductIdAndType";
-            rMessage.put("Error", (Object) tStr + " sInstanceId = " + sInstanceId + " registryTypeCode = " + registryTypeCode + " " + e.getMessage());
-            rMessage.put("ErrorCode", (Object) "400");
-            model.setrMessage(rMessage);
-            model.setError(true);
-            return model;
+            sErrorMessage = "Error for findByProductIdAndType InstanceId = " + sInstanceId + " registryTypeCode = " + registryTypeCode + " " + e.getMessage();
+            throw new ProcessTppProductRegisterException(sErrorMessage);
         }
         if (lTppProductRegisterInstance.size() > 0) {
             // Если повторы найдены, то return 400 Параметр registryTypeCode существует для ЭП с ИД
-            rMessage.clear();
-            tStr = "400/Bad request. parameter registryTypeCode exists already for ap and id" + " sInstanceId = " + sInstanceId + " registryTypeCode = " + registryTypeCode;
-            rMessage.put("Error", (Object) tStr);
-            rMessage.put("ErrorCode", (Object) "400");
-            model.setrMessage(rMessage);
-            model.setError(true);
-            return model;
+            sErrorMessage = "Parameter registryTypeCode exists already for ap and id" + " sInstanceId = " + sInstanceId + " registryTypeCode = " + registryTypeCode;
+            throw new BadRequestException(sErrorMessage);
         }
 
         //Шаг 3.
@@ -67,13 +57,8 @@ public class AccountService {
         List<TppRefProductRegisterType> lTppRefProductRegisterType = tppRefProductRegisterType.findByValue(registryTypeCode);
         if (lTppRefProductRegisterType.size() == 0) {
             //Если совпадений не найдено, то return 404 Код продукта не найден для данного типа регистра
-            rMessage.clear();
-            tStr = "404/Bad request. Product code <" + registryTypeCode + "> not found for this registry type in table tpp_ref_product_register_type";
-            rMessage.put("Error", (Object) tStr);
-            rMessage.put("ErrorCode", (Object) "404");
-            model.setrMessage(rMessage);
-            model.setError(true);
-            return model;
+            sErrorMessage = "Product code <" + registryTypeCode + "> not found for this registry type in table tpp_ref_product_register_type";
+            throw new NotFoundException(sErrorMessage);
         }
 
         //Шаг 4.
@@ -88,36 +73,20 @@ public class AccountService {
         try {
             tAccountPool = accountPool.findTopByBranchCodeAndCurrencyCodeAndMdmCodeAndPriorityCodeAndRegistryTypeCodeOrderByIdAsc(branchCode, currencyCode, mdmCode, priorityCode, registryTypeCode);
         } catch (Exception e) {
-            rMessage.clear();
-            tStr = "400/Error for findByinAccountPool";
-            rMessage.put("Error", (Object) tStr + " " + e.getMessage());
-            rMessage.put("ErrorCode", (Object) "400");
-            model.setrMessage(rMessage);
-            model.setError(true);
-            return model;
+            sErrorMessage = "Error for findByinAccountPool " + e.getMessage();
+            throw new ProcessAccountPoolException(sErrorMessage);
         }
         if (tAccountPool.size() == 0) {
-            rMessage.clear();
-            tStr = "404/Error for findByinAccountPoolSize";
-            rMessage.put("Error", (Object) tStr + " AccountPool is empty for branch,currency,mdmcode,priority from your request and busy");
-            rMessage.put("ErrorCode", (Object) "404");
-            model.setrMessage(rMessage);
-            model.setError(true);
-            return model;
+            sErrorMessage = "Error for findByinAccountPoolSize AccountPool is empty for branch,currency,mdmcode,priority from your request and busy";
+            throw new NotFoundException(sErrorMessage);
         }
 
         List<Account> tAccount;
         try {
             tAccount = account.findByAccountPoolIdAndBussyOrderByIdAsc(tAccountPool.get(0).getId(), false);
-
         } catch (Exception e) {
-            rMessage.clear();
-            tStr = "400/Error for findByinAccount";
-            rMessage.put("Error", (Object) tStr + " " + e.getMessage());
-            rMessage.put("ErrorCode", (Object) "400");
-            model.setrMessage(rMessage);
-            model.setError(true);
-            return model;
+            sErrorMessage = "Error for findByinAccount " + e.getMessage();
+            throw new ProcessAccountPoolException(sErrorMessage);
         }
 
         //Сформировать новый продуктовый регистр и записать его в БД
@@ -130,13 +99,8 @@ public class AccountService {
             tppProductRegisterForSave.setCurrencyCode(currencyCode);
             tppProductRegisterForSave.setState(StatePRegisterEnum.OPENNED.name());
         } catch (Exception e) {
-            rMessage.clear();
-            tStr = "400/Error for make tppProductRegister";
-            rMessage.put("Error", (Object) tStr + " " + e.getMessage());
-            rMessage.put("ErrorCode", (Object) "400");
-            model.setrMessage(rMessage);
-            model.setError(true);
-            return model;
+            sErrorMessage = "Error for make tppProductRegister " + e.getMessage();
+            throw new SaveTppProductRegisterException(sErrorMessage);
         }
 
         model.setTppProductRegisterForSave(tppProductRegisterForSave);

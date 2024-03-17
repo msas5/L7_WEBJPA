@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
-@WebMvcTest(controllers=WebService.class)
+@WebMvcTest(controllers=WebController.class)
 public class TestStarter {
 
     @Autowired
