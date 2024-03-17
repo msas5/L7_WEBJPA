@@ -28,7 +28,9 @@ public class WebController {
     CheckerInstance checkerInstance;
     @Autowired
     CheckerAccount checkerAccount;
+    @Autowired
     AccountService accountService;
+    @Autowired
     InstanceService instanceService;
 
     @PostMapping("/corporate-settlement-instance/create")
@@ -47,7 +49,6 @@ public class WebController {
     @PostMapping("/corporate-settlement-account/create")
     public ResponseEntity<Map <String, Object>>  corporateSettlementAccountCreate(@RequestBody Map<String, Object> dtoRequest){
 
-
         Model model = dataReader.get();
 
         model.setRqMap(dtoRequest);
@@ -55,8 +56,6 @@ public class WebController {
         model = checkerAccount.apply(model);
 
         model = accountService.Create(model);
-        if(true)
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(model.getrMessage());
 
         model = writerAccount.apply(model);
 

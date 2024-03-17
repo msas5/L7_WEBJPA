@@ -9,7 +9,6 @@ import ru.msas.entity.TppRefProductRegisterType;
 import ru.msas.enums.StatePRegisterEnum;
 import ru.msas.exceptions.*;
 import ru.msas.repo.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +27,7 @@ public class AccountService {
     AccountRepo account;
 
     public ru.msas.Model Create(ru.msas.Model model) {
+
         Map<String, Object> rqMap = model.getRqMap();
         String sErrorMessage;
 
