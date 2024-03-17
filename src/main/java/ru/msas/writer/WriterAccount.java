@@ -9,7 +9,6 @@ import ru.msas.exceptions.SaveTppProductRegisterException;
 import ru.msas.repo.TppProductRegisterRepo;
 import java.util.function.UnaryOperator;
 
-
 @Component
 public class WriterAccount  implements UnaryOperator<Model> {
 
